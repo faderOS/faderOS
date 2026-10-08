@@ -19,6 +19,7 @@ jobs:
           cmake --install "$RUNNER_TEMP/curl-build"
           echo "PKG_CONFIG_PATH=$RUNNER_TEMP/curl/lib/pkgconfig:$RUNNER_TEMP/curl/lib64/pkgconfig" >> "$GITHUB_ENV"
           echo "LD_LIBRARY_PATH=$RUNNER_TEMP/curl/lib:$RUNNER_TEMP/curl/lib64" >> "$GITHUB_ENV"
+          export LD_LIBRARY_PATH="$RUNNER_TEMP/curl/lib:$RUNNER_TEMP/curl/lib64"
           "$RUNNER_TEMP/curl/bin/curl" --version
       - run: python3 -m venv .venv && .venv/bin/pip install -r controller/test/requirements.txt
       - run: . .venv/bin/activate && cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
