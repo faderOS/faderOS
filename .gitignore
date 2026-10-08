@@ -1,0 +1,11 @@
+/build*/
+/.venv/
+__pycache__/
+*.log
+*.serial.log
+*.credentials.json
+*.credentials.json.tmp-*
+/link-settings.conf*
+/*-mappings*.json
+/analog-calibration*.conf
+/firmware/backup*/

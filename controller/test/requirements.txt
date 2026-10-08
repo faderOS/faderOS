@@ -1,0 +1,2 @@
+# Local OBS WebSocket protocol peers
+websockets>=14,<17

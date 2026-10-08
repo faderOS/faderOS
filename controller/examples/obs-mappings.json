@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "sources": [
+    {"slot": 0, "scene": "Camera general"},
+    {"slot": 1, "scene": "Presentador"},
+    {"slot": 2, "scene": "Video"},
+    {"slot": 12, "scene": "Segunda planta"},
+    {"slot": 13, "scene": "Grafismo"}
+  ]
+}
