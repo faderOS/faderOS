@@ -120,7 +120,7 @@ void TransitionControl::push_style(bool persist) {
     adapter.wipe_style(applied_multi(),applied_border(),aw[aspect],ah[aspect],uint32_t(applied_px()),uint32_t(applied_py()),pos_menu,persist);
 }
 void TransitionControl::reset_style(unsigned key) {
-    if(key==168) { global_border=0; bord_all=true; for(auto& o:style_overrides) o.has_border=false; bord_menu=false; }
+    if(key==168) { if(adapter.state().border_profile_known&&!adapter.prepare_wipe_border_profile(0,-1,-1))panel.beep();global_border=0; bord_all=true; for(auto& o:style_overrides) o.has_border=false; bord_menu=false; }
     else if(key==170) { global_aspect=adapter.wipe_aspect_percentage()?adapter.wipe_aspect_default():0; aspect_all=true; for(auto& o:style_overrides) o.has_aspect=false; aspect_menu=false; }
     else if(key==171) { global_multi=1; multi_all=true; for(auto& o:style_overrides) o.has_multi=false; multi_menu=false; }
     else if(key==174) { global_px=global_py=500; pos_all=true; for(auto& o:style_overrides) o.has_pos=false; pos_menu=false; }
@@ -400,6 +400,10 @@ bool TransitionControl::press(const std::bitset<KeyCount>& keys,const std::bitse
         close_soft_keypad();soft_menu=false;modify_menu=false;close_style_menus();mix_menu=false;wipe_menu=true;dme_menu=doubles[id]&&adapter.supports_dme();rate_slot=-1;
         typing=false;invalid=false;return true;
     }
+    if(bord_menu&&id==163&&adapter.state().border_profile_known){
+        auto s=adapter.state();int next=s.border_side==0?-1:s.border_side==-1?1:0;
+        style_keypad=typing=invalid=false;if(!adapter.prepare_wipe_border_profile(next,s.border_inner_soft,s.border_outer_soft))panel.beep();return true;
+    }
     const bool style_open=bord_menu||multi_menu||aspect_menu||pos_menu||(mix_params_menu&&style_keypad);
     if(!soft_keypad&&!style_open&&wipe_menu&&!dme_menu&&id==155) {
         if(direct) {
@@ -675,7 +679,8 @@ void TransitionControl::refresh(bool display,bool upper_bank) {
     panel.led(169,soft_menu&&display?2:applied_soft()?1:0);
     if(adapter.wipe_modifiers()) {
         const bool moved=applied_px()!=500||applied_py()!=500;
-        panel.led(168,bord_menu&&display?2:applied_border()?1:0);
+        const auto borderState=adapter.state();const bool borderModified=applied_border()||(borderState.border_profile_known&&(borderState.border_side!=0||borderState.border_inner_soft!=-1||borderState.border_outer_soft!=-1));
+        panel.led(168,bord_menu&&display?2:borderModified?1:0);
         panel.led(170,adapter.wipe_modifier_supported(170)?(aspect_menu&&display?2:applied_aspect()!=(adapter.wipe_aspect_percentage()?adapter.wipe_aspect_default():0u)?1:0):0);
         panel.led(171,adapter.wipe_modifier_supported(171)?(multi_menu&&display?2:applied_multi()!=1u?1:0):0);
         panel.led(174,pos_menu&&display?2:moved?1:0);
@@ -719,7 +724,7 @@ void TransitionControl::refresh(bool display,bool upper_bank) {
     panel.digits(digits);
     if(!display) return;
     for(unsigned i=160;i<=165;i++)panel.led(i,0);
-    if(mix_params_menu){SoftMenu menu;char title[41];if(mix_dust)std::snprintf(title,sizeof title,"DUST MIX RATIO / SIZE / FLASH");else if(mix_super)std::snprintf(title,sizeof title,"SUPER MIX GAINS");else std::snprintf(title,sizeof title,"DIP COLOR #%02X%02X%02X",mix_values[0],mix_values[1],mix_values[2]);menu.title(title);
+    if(mix_params_menu){SoftMenu menu;char title[41];if(mix_dust)std::snprintf(title,sizeof title,"DUST MIX PARAMETERS");else if(mix_super)std::snprintf(title,sizeof title,"SUPER MIX GAINS");else std::snprintf(title,sizeof title,"DIP COLOR #%02X%02X%02X",mix_values[0],mix_values[1],mix_values[2]);menu.title(title);
         for(unsigned i=0;i<(mix_super?2u:3u);++i){char text[8];std::snprintf(text,sizeof text,"%c:%u",mix_dust?(i==0?'R':i==1?'S':'F'):mix_super?(i?'B':'A'):i==0?'R':i==1?'G':'B',mix_values[i]);menu.field(i,text);}
         menu.field(5,"RESET");menu.show(panel,style_keypad?int(style_kind-240):-1);SoftMenu::navigation(panel,true);
     } else if(geometry_menu){SoftMenu menu;char title[41],text[12];std::snprintf(title,sizeof title,mosaic_target()?"WIPE BLOCK SIZE %u":code==49?"WIPE POLYGON %u":"WIPE CORNERS %u",code);std::snprintf(text,sizeof text,mosaic_target()?"%u%%":"%u",geometry_value());menu.title(title);menu.field(0,text);menu.field(1,"RESET");menu.show(panel,style_keypad?0:-1);SoftMenu::navigation(panel,true);
@@ -755,9 +760,10 @@ void TransitionControl::refresh(bool display,bool upper_bank) {
         menu.field(0,text);
         menu.field(1,custom?"CUSTOM":"GLOBAL");
         menu.field(2,"RSTGL");
+        if(bord_menu&&adapter.state().border_profile_known){int side=adapter.state().border_side;menu.field(3,side<0?"INNER":side>0?"OUTER":"CENTER");}
         menu.show(panel,style_keypad?0:-1);
         panel.led(161,custom?1:2);
-        panel.led(162,1);
+        panel.led(162,1);if(bord_menu&&adapter.state().border_profile_known)panel.led(163,1);
     } else if(soft_menu) {
         SoftMenu menu;
         char title[41],identity[16];wipe_identity(identity,sizeof identity);

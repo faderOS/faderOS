@@ -30,6 +30,7 @@ public:
     bool supports_transition_preview() const override;
     bool set_transition_preview(bool) override;
     bool supports_dme() const override;
+    bool prepare_wipe_border_profile(int,int,int) override;
     bool prepare_dust(const std::array<uint32_t,3>&) override;
     bool supports_mix_preparation(bool)const override;
     bool prepare_mix(bool,uint32_t,uint32_t=0)override;

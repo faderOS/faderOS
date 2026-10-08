@@ -1,6 +1,6 @@
 # User guide
 
-Start with `controller-link --help`. Use a serial device running the replacement
+Start with `faderOS --help`. Use a serial device running the replacement
 binary-link firmware. The host starts at 9600 baud and negotiates the requested
 rate. 38400 baud has been validated on the physical panel. 76800 is experimental
 and currently unreliable on the available serial hardware; use 38400.
@@ -175,3 +175,20 @@ and per-effect inheritance choices.
 MODFY uses HIGH while DIP/SUPER MIX editing is open, LOW when the applicable
 prepared values are non-default, and OFF on ordinary MIX modes without those
 parameters. Unsupported/irrelevant DME preparation does not light a MIX modifier.
+
+
+## Dust Mix and one-sided borders (controller 0.29.0)
+
+With kavtor 0.26.0 and casparMIX 0.19.0, MIX 8 selects Dust Mix. It lights LOW
+when available and HIGH when selected. MODFY F1/F2/F3 prepare dust ratio (0–100),
+square particle size (1–100% of picture height) and flash steps (0–100). Encoders
+update preparation; F keys open numeric drafts, ENTER commits and the same F key
+cancels. F6 restores 50/2/0. Double-click MODFY restores defaults without taking
+LCD focus. AUTO, T-bar and TRANSITION PREVIEW use the selected Dust Mix mode.
+
+For native WIPE borders, BORD F4 cycles CENTER → INNER → OUTER. Detailed inner
+and outer softness is prepared in kavtor's browser touch surface or Qt workspace.
+BORD stays LOW when a profile differs from default. Double-click BORD clears
+width and restores centered/inherited softness without opening its menu.
+Profiles are initially shared preparation defaults. Existing per-wipe width
+and SOFT overrides retain their current behavior. No Sony firmware flash is needed.

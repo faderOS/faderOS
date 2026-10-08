@@ -250,7 +250,8 @@ struct KavtorAdapter::Impl {
         if(event=="state"&&message.contains("capabilities")&&message.at("capabilities").is_object()) {
             const auto& caps=message.at("capabilities");
             view.mix_preparation_known=caps.contains("mixPreparation")&&caps.at("mixPreparation").is_boolean()&&caps.at("mixPreparation").get<bool>();
-            view.dust_mix_known=caps.value("dustMix",false);
+            view.border_profile_known=caps.contains("asymmetricBorder")&&caps["asymmetricBorder"].is_boolean()&&caps["asymmetricBorder"].get<bool>();
+            view.dust_mix_known=caps.contains("dustMix")&&caps["dustMix"].is_boolean()&&caps["dustMix"].get<bool>();
             broadcast_mix_supported=caps.contains("broadcastMixes")&&caps.at("broadcastMixes").is_boolean()&&caps.at("broadcastMixes").get<bool>();
             geometry_supported=caps.contains("sonyGeometry")&&caps.at("sonyGeometry").is_boolean()&&caps.at("sonyGeometry").get<bool>();
             view.dme_background_scopes_supported=caps.contains("dmeBackgroundScopes")&&caps.at("dmeBackgroundScopes").is_boolean()&&caps.at("dmeBackgroundScopes").get<bool>();
@@ -305,6 +306,10 @@ struct KavtorAdapter::Impl {
             }
         }
         view.broadcast_mix_known=broadcast_mix_supported;
+        if(message.contains("wipeBorderSide")&&message.contains("wipeInnerSoft")&&message.contains("wipeOuterSoft")&&message["wipeBorderSide"].is_number_integer()&&message["wipeInnerSoft"].is_number_integer()&&message["wipeOuterSoft"].is_number_integer()){
+            int side=message["wipeBorderSide"],inner=message["wipeInnerSoft"],outer=message["wipeOuterSoft"];
+            if(side>=-1&&side<=1&&inner>=-1&&inner<=100&&outer>=-1&&outer<=100){view.border_side=side;view.border_inner_soft=inner;view.border_outer_soft=outer;}
+        }
         if(message.contains("dustRatio")&&message.contains("dustSize")&&message.contains("dustFlash")&&message["dustRatio"].is_number_integer()&&message["dustSize"].is_number_integer()&&message["dustFlash"].is_number_integer()){
             int ratio=message["dustRatio"],size=message["dustSize"],flash=message["dustFlash"];
             if(ratio>=0&&ratio<=100&&size>=1&&size<=100&&flash>=0&&flash<=100){std::array<uint32_t,3> values{unsigned(ratio),unsigned(size),unsigned(flash)};if(values!=view.dust_values){view.dust_values=values;++view.mix_preparation_revision;}}
@@ -1065,5 +1070,13 @@ bool KavtorAdapter::prepare_dust(const std::array<uint32_t,3>& values){
     if(!state().dust_mix_known)return false;
     if(!enqueue(Json{{"cmd","dust_params"},{"ratio",values[0]},{"size",values[1]},{"flash",values[2]}}.dump()))return false;
     std::lock_guard<std::mutex> lock(impl->mutex);impl->view.dust_values=values;++impl->view.mix_preparation_revision;return true;
+}
+}
+
+namespace bkds::link {
+bool KavtorAdapter::prepare_wipe_border_profile(int side,int inner,int outer){
+    if(side<-1||side>1||inner<-1||inner>100||outer<-1||outer>100||!state().border_profile_known)return false;
+    if(!enqueue(Json{{"cmd","wipe_border_profile"},{"side",side},{"innerSoft",inner},{"outerSoft",outer}}.dump()))return false;
+    std::lock_guard<std::mutex> lock(impl->mutex);impl->view.border_side=side;impl->view.border_inner_soft=inner;impl->view.border_outer_soft=outer;return true;
 }
 }

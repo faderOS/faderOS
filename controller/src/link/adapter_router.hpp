@@ -76,6 +76,8 @@ public:
     bool live_transition_controls() const override {return active&&active->live_transition_controls();}
     bool live_bus_changes() const override {return active&&active->live_bus_changes();}
     bool supports_mix_preparation(bool super)const override {return active&&active->supports_mix_preparation(super);}
+    bool prepare_dust(const std::array<uint32_t,3>& values)override {return active&&active->prepare_dust(values);}
+    bool prepare_wipe_border_profile(int side,int inner,int outer)override {return active&&active->prepare_wipe_border_profile(side,inner,outer);}
     bool prepare_mix(bool super,uint32_t a,uint32_t b=0)override {return active&&active->prepare_mix(super,a,b);}
     bool mix_dip() const override {return active&&active->mix_dip();}
     unsigned stinger_slots() const override {return active?active->stinger_slots():0;}

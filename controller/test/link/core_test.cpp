@@ -160,6 +160,16 @@ int main() {
     }
 
     {
+        struct Border:FakeMixer {
+            bool wipe_modifiers()const override{return true;}
+            bool prepare_wipe_border_profile(int side,int inner,int outer)override{view.border_side=side;view.border_inner_soft=inner;view.border_outer_soft=outer;return true;}
+        } a;a.view.border_profile_known=true;Panel p;TransitionControl tr(p,a);
+        Changes open;open.pressed[168]=true;tr.modifiers(open,100,true);tr.advance_modifiers(1000,true);tr.refresh();
+        assert(has(p.line(1),"CENTER"));std::bitset<KeyCount> key;key[163]=true;assert(tr.press(key));tr.refresh();assert(a.view.border_side==-1&&has(p.line(1),"INNER"));
+        assert(tr.press(key));tr.refresh();assert(a.view.border_side==1&&has(p.line(1),"OUTER"));assert(tr.press(key));assert(a.view.border_side==0);
+        a.view.border_side=-1;a.view.border_inner_soft=15;a.view.border_outer_soft=0;Changes reset;reset.pressed[168]=reset.double_click[168]=true;tr.modifiers(reset,1200,true);assert(a.view.border_side==0&&a.view.border_inner_soft==-1&&a.view.border_outer_soft==-1);
+    }
+    {
         struct Tiles:FakeMixer {unsigned size=10,writes=0;
             bool wipe_modifiers()const override{return true;}
             bool wipe_tiles_supported(uint32_t code)const override{return code==200;}
