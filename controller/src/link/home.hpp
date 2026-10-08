@@ -3,7 +3,7 @@
 #include "config.hpp"
 namespace bkds::link {
 inline constexpr const char* ProductName="faderOS";
-inline constexpr const char* HostVersion="0.28.0";
+inline constexpr const char* HostVersion="0.29.0";
 inline constexpr const char* ProtocolLabels[]={"VMIX","ATEM","OBS","MIDI","KAVTOR"};
 inline void home_screen(Panel& panel,Backend backend,bool connected,uint32_t now,const char* clock) {
     std::string top=std::string(ProductName)+" "+HostVersion;

@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.20)
-project(faderOS VERSION 0.29.0 LANGUAGES C CXX)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/controller/src/link/home.hpp")
+# HostVersion is the single source for CLI, LCD and package metadata.
+file(STRINGS controller/src/link/home.hpp faderos_version_line REGEX "HostVersion=")
+string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" faderos_version "${faderos_version_line}")
+if(NOT faderos_version)
+  message(FATAL_ERROR "Cannot read faderOS HostVersion")
+endif()
+project(faderOS VERSION ${faderos_version} LANGUAGES C CXX)
 include(CTest)
 add_subdirectory(controller)
 if(BUILD_TESTING)
