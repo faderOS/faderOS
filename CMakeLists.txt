@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(faderOS VERSION 0.28.0 LANGUAGES C CXX)
+project(faderOS VERSION 0.29.0 LANGUAGES C CXX)
 include(CTest)
 add_subdirectory(controller)
 if(BUILD_TESTING)

@@ -176,7 +176,7 @@ void TransitionControl::modifiers(Changes& change,uint32_t now,bool allow_menu) 
                 typing=modify_before.typing;invalid=modify_before.invalid;value=modify_before.value;geometry_menu=modify_before.geometry;mix_params_menu=modify_before.mix_params;
             }
             modify_focus_saved=false;
-            if(mix_params_target()){const bool super=mix_choice==7;if(!adapter.prepare_mix(super,super?100:0,super?100:0))panel.beep();}
+            if(mix_params_target()){if(mix_choice==8){if(!adapter.prepare_dust({50,2,0}))panel.beep();}else {const bool super=mix_choice==7;if(!adapter.prepare_mix(super,super?100:0,super?100:0))panel.beep();}}
             else if(geometry_target()){reset_geometry();push_style(true);}
             else if(adapter.supports_dme_background(dme_choice)){background_arm=false;if(!adapter.set_dme_background(dme_choice,-1))panel.beep();}
             else if(has_dme_parameters()) parameters()={};
@@ -278,12 +278,12 @@ bool TransitionControl::press(const std::bitset<KeyCount>& keys,const std::bitse
     unsigned id=0; while(!keys[id]) ++id;
     if(mix_params_menu&&((id>=160&&id<=162)||id==165||id==176)){
         if(id==176){if(style_keypad)style_keypad=false;else mix_params_menu=modify_menu=false;typing=invalid=false;return true;}
-        if(id==165){mix_values=mix_super?std::array<uint32_t,3>{100,100,0}:std::array<uint32_t,3>{0,0,0};style_keypad=typing=invalid=false;if(!push_mix_values())panel.beep();return true;}
+        if(id==165){mix_values=mix_dust?std::array<uint32_t,3>{50,2,0}:mix_super?std::array<uint32_t,3>{100,100,0}:std::array<uint32_t,3>{0,0,0};style_keypad=typing=invalid=false;if(!push_mix_values())panel.beep();return true;}
         unsigned index=id-160;if(index>=(mix_super?2u:3u)){panel.beep();return true;}
         bool same=style_keypad&&style_kind==240+index;style_keypad=!same;style_kind=240+index;value=mix_values[index];typing=invalid=false;return true;
     }
     if(id==173&&mix_params_target()){
-        bool open=!mix_params_menu;close_soft_keypad();close_style_menus();soft_menu=false;mix_super=mix_choice==7;mix_params_menu=modify_menu=open;background_arm=false;read_mix_values();typing=invalid=false;return true;
+        bool open=!mix_params_menu;close_soft_keypad();close_style_menus();soft_menu=false;mix_super=mix_choice==7;mix_dust=mix_choice==8;mix_params_menu=modify_menu=open;background_arm=false;read_mix_values();typing=invalid=false;return true;
     }
     if(geometry_menu&&(!geometry_target()))geometry_menu=false;
     if(geometry_menu&&(id==160||id==161||id==176)){
@@ -487,7 +487,7 @@ bool TransitionControl::press(const std::bitset<KeyCount>& keys,const std::bitse
     if(id==156) {
         if(typing) {
             if(style_keypad) {
-                if(mix_params_menu&&style_kind>=240&&style_kind<=242){if(value>(mix_super?100u:255u)){invalid=true;panel.beep();return true;}auto old=mix_values;mix_values[style_kind-240]=value;if(!push_mix_values()){mix_values=old;invalid=true;panel.beep();return true;}style_keypad=typing=invalid=false;return true;}
+                if(mix_params_menu&&style_kind>=240&&style_kind<=242){if(value>((mix_super||mix_dust)?100u:255u)||(mix_dust&&style_kind==241&&value<1)){invalid=true;panel.beep();return true;}auto old=mix_values;mix_values[style_kind-240]=value;if(!push_mix_values()){mix_values=old;invalid=true;panel.beep();return true;}style_keypad=typing=invalid=false;return true;}
                 if(style_kind==173){if(value<geometry_minimum()||value>geometry_maximum()){invalid=true;panel.beep();return true;}store_geometry_value(value);style_keypad=false;typing=invalid=false;push_style(true);return true;}
                 if(style_kind==168) {
                     if(value>adapter.wipe_border_maximum()) { invalid=true; panel.beep(); return true; }
@@ -719,8 +719,8 @@ void TransitionControl::refresh(bool display,bool upper_bank) {
     panel.digits(digits);
     if(!display) return;
     for(unsigned i=160;i<=165;i++)panel.led(i,0);
-    if(mix_params_menu){SoftMenu menu;char title[41];if(mix_super)std::snprintf(title,sizeof title,"SUPER MIX GAINS");else std::snprintf(title,sizeof title,"DIP COLOR #%02X%02X%02X",mix_values[0],mix_values[1],mix_values[2]);menu.title(title);
-        for(unsigned i=0;i<(mix_super?2u:3u);++i){char text[8];std::snprintf(text,sizeof text,"%c:%u",mix_super?(i?'B':'A'):i==0?'R':i==1?'G':'B',mix_values[i]);menu.field(i,text);}
+    if(mix_params_menu){SoftMenu menu;char title[41];if(mix_dust)std::snprintf(title,sizeof title,"DUST MIX RATIO / SIZE / FLASH");else if(mix_super)std::snprintf(title,sizeof title,"SUPER MIX GAINS");else std::snprintf(title,sizeof title,"DIP COLOR #%02X%02X%02X",mix_values[0],mix_values[1],mix_values[2]);menu.title(title);
+        for(unsigned i=0;i<(mix_super?2u:3u);++i){char text[8];std::snprintf(text,sizeof text,"%c:%u",mix_dust?(i==0?'R':i==1?'S':'F'):mix_super?(i?'B':'A'):i==0?'R':i==1?'G':'B',mix_values[i]);menu.field(i,text);}
         menu.field(5,"RESET");menu.show(panel,style_keypad?int(style_kind-240):-1);SoftMenu::navigation(panel,true);
     } else if(geometry_menu){SoftMenu menu;char title[41],text[12];std::snprintf(title,sizeof title,mosaic_target()?"WIPE BLOCK SIZE %u":code==49?"WIPE POLYGON %u":"WIPE CORNERS %u",code);std::snprintf(text,sizeof text,mosaic_target()?"%u%%":"%u",geometry_value());menu.title(title);menu.field(0,text);menu.field(1,"RESET");menu.show(panel,style_keypad?0:-1);SoftMenu::navigation(panel,true);
     } else if(modify_menu&&adapter.supports_dme_background(dme_choice)){SoftMenu menu;auto state=adapter.state();const int current=adapter.dme_background(dme_choice);char title[41];auto name=adapter.keypad_transition_label(TransitionType::dme,dme_choice);if(current==-3)std::snprintf(title,sizeof title,"%s BKGD STATIC IMAGE",name.c_str());else if(current<0)std::snprintf(title,sizeof title,"%s BKGD BLACK",name.c_str());else if(current>=1000)std::snprintf(title,sizeof title,"%s BKGD M/E %d",name.c_str(),current-999);else std::snprintf(title,sizeof title,"%s BKGD INPUT %d",name.c_str(),current+1);menu.title(title);menu.field(0,"AUX");menu.field(1,"BLACK");menu.field(2,"COLOR");if(state.dme_background_scopes_supported){const bool custom=adapter.dme_background_custom(dme_choice);menu.field(3,"GLOBAL");menu.field(4,"CUSTOM");menu.field(5,"RSTGL");menu.title((std::string("DME BKGD ")+(custom?"CUSTOM ":"GLOBAL ")+(current==-3?"IMAGE":current==-1?"BLACK":current>=1000?"M/E "+std::to_string(current-999):"INPUT "+std::to_string(current+1))).c_str());}menu.show(panel);if(state.dme_background_scopes_supported){const bool custom=adapter.dme_background_custom(dme_choice);panel.led(163,custom?1:2);panel.led(164,custom?2:1);panel.led(165,1);}panel.led(160,background_arm&&!background_color?2:1);panel.led(161,current==-1?2:1);panel.led(162,state.color_sources.any()?(background_arm&&background_color?2:1):0);SoftMenu::navigation(panel,true);
@@ -797,9 +797,9 @@ bool TransitionControl::background_press(const std::bitset<KeyCount>& keys,bool 
 namespace bkds::link {
 void TransitionControl::mix_rotary(int a,int b,int c){
     if(!mix_params_menu)return;
-    const int deltas[]={a,b,c};const unsigned max=mix_super?100u:255u;
-    if(style_keypad){unsigned i=style_kind-240;if(i>=3||!deltas[i])return;int64_t next=int64_t(value)+deltas[i];value=unsigned(next<0?0:next>max?max:next);typing=true;invalid=false;return;}
-    auto previous=mix_values;for(unsigned i=0;i<(mix_super?2u:3u);++i){int64_t next=int64_t(mix_values[i])+deltas[i];mix_values[i]=unsigned(next<0?0:next>max?max:next);}
+    const int deltas[]={a,b,c};const unsigned max=(mix_super||mix_dust)?100u:255u;
+    if(style_keypad){unsigned i=style_kind-240;if(i>=3||!deltas[i])return;int64_t next=int64_t(value)+deltas[i];const unsigned min=mix_dust&&i==1?1:0;value=unsigned(next<min?min:next>max?max:next);typing=true;invalid=false;return;}
+    auto previous=mix_values;for(unsigned i=0;i<(mix_super?2u:3u);++i){int64_t next=int64_t(mix_values[i])+deltas[i];const unsigned min=mix_dust&&i==1?1:0;mix_values[i]=unsigned(next<min?min:next>max?max:next);}
     if(previous!=mix_values&&!push_mix_values()){mix_values=previous;panel.beep();}
 }
 }

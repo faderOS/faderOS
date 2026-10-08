@@ -125,10 +125,11 @@ int main() {
     {
         struct Mix:FakeMixer {
             unsigned writes=0;
-            unsigned keypad_transition_slots(TransitionType t)const override{return t==TransitionType::mix?7:0;}
+            unsigned keypad_transition_slots(TransitionType t)const override{return t==TransitionType::mix?8:0;}
+            bool prepare_dust(const std::array<uint32_t,3>& v)override{view.dust_values=v;++view.mix_preparation_revision;++writes;return true;}
             bool supports_mix_preparation(bool)const override{return true;}
             bool prepare_mix(bool super,uint32_t a,uint32_t b)override{if(super){view.super_gain_a=a;view.super_gain_b=b;}else view.dip_rgb=a;++view.mix_preparation_revision;++writes;return true;}
-        } a;Panel p;TransitionControl t(p,a);
+        } a;a.view.dust_mix_known=true;Panel p;TransitionControl t(p,a);
         auto key=[&](unsigned id){std::bitset<KeyCount> k;k[id]=true;assert(t.press(k));t.refresh();};
         key(120);key(138);key(173);assert(has(p.line(0),"DIP COLOR")&&p.desired_led(173)==2);
         t.mix_rotary(10,20,30);t.refresh();assert(a.view.dip_rgb==0x0a141e);
@@ -138,6 +139,11 @@ int main() {
         Changes reset;reset.pressed[173]=reset.double_click[173]=true;t.modifiers(reset,100,true);t.refresh();assert(a.view.dip_rgb==0&&!has(p.line(0),"DIP COLOR"));
         key(129);key(173);assert(has(p.line(0),"SUPER MIX"));key(161);before=a.writes;key(138);key(153);assert(a.writes==before);key(156);assert(a.view.super_gain_b==50);
         t.mix_rotary(-25,0,0);assert(a.view.super_gain_a==75&&a.view.super_gain_b==50);key(165);assert(a.view.super_gain_a==100&&a.view.super_gain_b==100);
+        key(176);key(130);key(173);assert(has(p.line(0),"DUST MIX")&&p.desired_led(173)==2);
+        key(160);before=a.writes;key(129);key(138);assert(a.writes==before&&a.view.dust_values[0]==50);key(156);assert(a.view.dust_values[0]==75);
+        t.mix_rotary(0,3,10);assert((a.view.dust_values==std::array<uint32_t,3>{75,5,10}));
+        key(165);assert((a.view.dust_values==std::array<uint32_t,3>{50,2,0}));
+
     }
     {
         struct Bg:FakeMixer {

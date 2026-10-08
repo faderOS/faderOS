@@ -250,6 +250,7 @@ struct KavtorAdapter::Impl {
         if(event=="state"&&message.contains("capabilities")&&message.at("capabilities").is_object()) {
             const auto& caps=message.at("capabilities");
             view.mix_preparation_known=caps.contains("mixPreparation")&&caps.at("mixPreparation").is_boolean()&&caps.at("mixPreparation").get<bool>();
+            view.dust_mix_known=caps.value("dustMix",false);
             broadcast_mix_supported=caps.contains("broadcastMixes")&&caps.at("broadcastMixes").is_boolean()&&caps.at("broadcastMixes").get<bool>();
             geometry_supported=caps.contains("sonyGeometry")&&caps.at("sonyGeometry").is_boolean()&&caps.at("sonyGeometry").get<bool>();
             view.dme_background_scopes_supported=caps.contains("dmeBackgroundScopes")&&caps.at("dmeBackgroundScopes").is_boolean()&&caps.at("dmeBackgroundScopes").get<bool>();
@@ -304,6 +305,10 @@ struct KavtorAdapter::Impl {
             }
         }
         view.broadcast_mix_known=broadcast_mix_supported;
+        if(message.contains("dustRatio")&&message.contains("dustSize")&&message.contains("dustFlash")&&message["dustRatio"].is_number_integer()&&message["dustSize"].is_number_integer()&&message["dustFlash"].is_number_integer()){
+            int ratio=message["dustRatio"],size=message["dustSize"],flash=message["dustFlash"];
+            if(ratio>=0&&ratio<=100&&size>=1&&size<=100&&flash>=0&&flash<=100){std::array<uint32_t,3> values{unsigned(ratio),unsigned(size),unsigned(flash)};if(values!=view.dust_values){view.dust_values=values;++view.mix_preparation_revision;}}
+        }
         if(message.contains("dipColor")&&message.at("dipColor").is_string()){const auto text=message.at("dipColor").get<std::string>();if(text.size()==7&&text[0]=='#'&&std::all_of(text.begin()+1,text.end(),[](unsigned char c){return std::isxdigit(c)!=0;})){auto rgb=uint32_t(std::strtoul(text.c_str()+1,nullptr,16));if(rgb!=view.dip_rgb){view.dip_rgb=rgb;++view.mix_preparation_revision;}}}
         if(message.contains("superMixGainA")&&message.contains("superMixGainB")&&message.at("superMixGainA").is_number_integer()&&message.at("superMixGainB").is_number_integer()){
             int a=message.at("superMixGainA").get<int>(),b=message.at("superMixGainB").get<int>();if(a>=0&&a<=100&&b>=0&&b<=100&&(unsigned(a)!=view.super_gain_a||unsigned(b)!=view.super_gain_b)){view.super_gain_a=unsigned(a);view.super_gain_b=unsigned(b);++view.mix_preparation_revision;}}
@@ -565,7 +570,7 @@ struct KavtorAdapter::Impl {
         else if(action==MixerAction::cut) message={{"cmd","cut"}};
         else if(action==MixerAction::automatic) {
             if(kind==TransitionType::mix) {
-                static const char* modes[]={"mix","mix","vfade","fadecut","cutfade","dip","nam","supermix"};
+                static const char* modes[]={"mix","mix","vfade","fadecut","cutfade","dip","nam","supermix","dustmix"};
                 message={{"cmd","mix"},{"mode",modes[code]}};
             } else if(kind==TransitionType::dme) {
                 static const char* directions[]={"left","right","top","bottom"};
@@ -695,7 +700,7 @@ bool KavtorAdapter::prepare_wipe_modifier(unsigned id,uint32_t a,uint32_t) {
 }
 bool KavtorAdapter::manual(uint16_t position,TransitionType type,uint32_t code,bool reverse,uint32_t softness) {
     try {
-        if((type==TransitionType::mix&&(code>7||(code==5&&!impl->dip_supported)||(code>=6&&!impl->broadcast_mix_supported)))||position>4095||softness>100||(type!=TransitionType::mix&&type!=TransitionType::wipe&&type!=TransitionType::dme)) return false;
+        if((type==TransitionType::mix&&(code>8||(code==5&&!impl->dip_supported)||((code==6||code==7)&&!impl->broadcast_mix_supported)||(code==8&&!impl->view.dust_mix_known)))||position>4095||softness>100||(type!=TransitionType::mix&&type!=TransitionType::wipe&&type!=TransitionType::dme)) return false;
         std::lock_guard<std::mutex> lock(impl->mutex);
         if(!impl->view.connected) return false;
         if(impl->manual_active) {
@@ -711,10 +716,10 @@ bool KavtorAdapter::manual(uint16_t position,TransitionType type,uint32_t code,b
         if(type==TransitionType::dme&&(!impl->dme_available(code)||(code>=1&&code<=8&&!impl->move_supported)||!impl->view.next_background||std::any_of(impl->view.next_key.begin(),impl->view.next_key.end(),[](bool on){return on;})))return false;
         if(type==TransitionType::wipe&&code>999)return false;
         if(type==TransitionType::wipe&&!impl->sony_codes.empty()&&std::none_of(impl->sony_codes.begin(),impl->sony_codes.end(),[code](const Json& value){return value.is_number_integer()&&value==code;}))return false;
-        if(type==TransitionType::mix&&code>1&&(!impl->native_transitions_supported||code>7||!impl->view.next_background||std::any_of(impl->view.next_key.begin(),impl->view.next_key.end(),[](bool on){return on;})))return false;
+        if(type==TransitionType::mix&&code>1&&(!impl->native_transitions_supported||code>8||!impl->view.next_background||std::any_of(impl->view.next_key.begin(),impl->view.next_key.end(),[](bool on){return on;})))return false;
         impl->manual_message={{"cmd","manual"},{"type",type==TransitionType::mix?"mix":type==TransitionType::dme?"dme":"wipe"},{"position",position}};
         if(type==TransitionType::mix) {
-            static const char* modes[]={"mix","mix","vfade","fadecut","cutfade","dip","nam","supermix"};
+            static const char* modes[]={"mix","mix","vfade","fadecut","cutfade","dip","nam","supermix","dustmix"};
             impl->manual_message["mode"]=modes[code];
         }
         if(type==TransitionType::dme){if(code>=1000)impl->manual_message["sony"]=code;else impl->manual_message["effect"]=Impl::dme_effect(code);impl->manual_message["reverse"]=reverse;if(code>=1&&code<=8){static const char* directions[]={"left","right","top","bottom"};impl->manual_message["direction"]=directions[((code-1)%4)^(reverse?1u:0u)];}}
@@ -756,7 +761,7 @@ bool KavtorAdapter::automatic(TransitionType type,uint32_t duration,uint32_t cod
         if(type!=TransitionType::mix&&type!=TransitionType::wipe&&type!=TransitionType::stinger&&type!=TransitionType::dme) return false;
         if((type==TransitionType::mix&&code>1)||(type==TransitionType::dme)) {
             if(!impl->native_transitions_supported||!impl->view.next_background||std::any_of(impl->view.next_key.begin(),impl->view.next_key.end(),[](bool on){return on;}))return false;
-            if(type==TransitionType::mix&&(code>7||(code==5&&!impl->dip_supported)||(code>=6&&!impl->broadcast_mix_supported)))return false;
+            if(type==TransitionType::mix&&(code>8||(code==5&&!impl->dip_supported)||((code==6||code==7)&&!impl->broadcast_mix_supported)||(code==8&&!impl->view.dust_mix_known)))return false;
             if(type==TransitionType::dme&&(!impl->dme_available(code)))return false;
         }
         if(type==TransitionType::wipe&&!impl->sony_codes.empty()&&std::none_of(impl->sony_codes.begin(),impl->sony_codes.end(),[code](const Json& value){return value.is_number_integer()&&value==code;}))return false;
@@ -949,10 +954,11 @@ bool KavtorAdapter::supports_dme() const {
 unsigned KavtorAdapter::keypad_transition_slots(TransitionType type) const {
     std::lock_guard<std::mutex> lock(impl->mutex);
     if(!impl->view.connected||!impl->native_transitions_supported)return 0;
-    return type==TransitionType::mix?(impl->broadcast_mix_supported?7:impl->dip_supported?5:4):type==TransitionType::dme?(impl->cube_supported?9:8):0;
+    return type==TransitionType::mix?(impl->view.dust_mix_known?8:impl->broadcast_mix_supported?7:impl->dip_supported?5:4):type==TransitionType::dme?(impl->cube_supported?9:8):0;
 }
 std::string KavtorAdapter::keypad_transition_label(TransitionType type,unsigned code) const {
     std::lock_guard<std::mutex> lock(impl->mutex);
+    if(type==TransitionType::mix&&code==8&&impl->view.dust_mix_known)return "DUST MIX";
     if(type==TransitionType::mix&&code==5&&impl->dip_supported)return "DIP";
     if(type==TransitionType::mix&&code==6&&impl->broadcast_mix_supported)return "NAM";
     if(type==TransitionType::mix&&code==7&&impl->broadcast_mix_supported)return "SUPER MIX";
@@ -1005,7 +1011,7 @@ bool KavtorAdapter::keypad_transition_available(TransitionType t,unsigned slot) 
     if(t==TransitionType::stinger)return slot<impl->stingers.size()&&impl->stingers[slot].is_object()&&impl->stingers[slot].contains("media")&&impl->stingers[slot]["media"].is_string()&&!impl->stingers[slot]["media"].get<std::string>().empty();
     if(!impl->native_transitions_supported)return false;
     if(t==TransitionType::dme)return impl->dme_available(slot);
-    return t==TransitionType::mix&&slot>=1&&(slot<=4||(slot==5&&impl->dip_supported)||(slot<=7&&impl->broadcast_mix_supported));
+    return t==TransitionType::mix&&slot>=1&&(slot<=4||(slot==5&&impl->dip_supported)||((slot==6||slot==7)&&impl->broadcast_mix_supported)||(slot==8&&impl->view.dust_mix_known));
 }
 }
 
@@ -1050,5 +1056,14 @@ bool KavtorAdapter::set_dme_background_scope(unsigned code,bool custom,bool copy
     std::lock_guard<std::mutex> lock(impl->mutex);
     if(!impl->view.connected||!impl->view.dme_background_scopes_supported||!impl->dme_available(code)||!impl->raw.empty()||!impl->background_scope_pending.empty())return false;
     const auto effect=Impl::dme_effect(code);impl->raw=Json{{"cmd","dme_background"},{"effect",effect},{"custom",custom},{"copyGlobal",copy},{"me",impl->view.me}}.dump();impl->raw_take=false;impl->background_scope_pending=effect;impl->background_scope_expected=custom;return true;
+}
+}
+
+namespace bkds::link {
+bool KavtorAdapter::prepare_dust(const std::array<uint32_t,3>& values){
+    if(values[0]>100||values[1]<1||values[1]>100||values[2]>100)return false;
+    if(!state().dust_mix_known)return false;
+    if(!enqueue(Json{{"cmd","dust_params"},{"ratio",values[0]},{"size",values[1]},{"flash",values[2]}}.dump()))return false;
+    std::lock_guard<std::mutex> lock(impl->mutex);impl->view.dust_values=values;++impl->view.mix_preparation_revision;return true;
 }
 }

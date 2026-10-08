@@ -43,6 +43,8 @@ struct MixerState {
     std::array<PresetBackground,288> dme_preset_backgrounds{};
     bool dme_preset_background_supported=false;
     bool mix_preparation_known=false,broadcast_mix_known=false;
+    bool dust_mix_known=false;
+    std::array<uint32_t,3> dust_values{50,2,0};
     uint32_t dip_rgb=0,mix_preparation_revision=0,super_gain_a=100,super_gain_b=100;
     bool dme_background_scopes_supported=false;std::array<bool,5> dme_background_customs{{true,true,true,true,true}};
     bool dme_background_supported=false;std::array<int,5> dme_backgrounds{{-1,-1,-1,-1,-1}};std::bitset<24> color_sources;
@@ -189,6 +191,7 @@ struct MixerAdapter {
     virtual bool live_transition_controls() const {return false;}
     virtual bool live_bus_changes() const {return false;}
     virtual bool supports_mix_preparation(bool) const {return false;}
+    virtual bool prepare_dust(const std::array<uint32_t,3>&){return false;}
     virtual bool prepare_mix(bool,uint32_t,uint32_t=0) {return false;}
     virtual bool mix_dip() const {return false;}
     virtual unsigned stinger_slots() const {return 10;}
