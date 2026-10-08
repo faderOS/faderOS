@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/link/home.hpp")
 # Keep CLI, LCD and package versions synchronized with the source definition.
 file(STRINGS src/link/home.hpp host_version REGEX "HostVersion=")
 string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" host_version "${host_version}")
