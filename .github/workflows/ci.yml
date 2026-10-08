@@ -1,0 +1,27 @@
+name: Build and test
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y cmake g++ pkg-config libcurl4-openssl-dev libssl-dev libxml2-dev nlohmann-json3-dev python3-venv nodejs
+      - name: Build curl with required WebSocket support
+        run: |
+          git clone --depth 1 --branch curl-8_16_0 https://github.com/curl/curl.git "$RUNNER_TEMP/curl-src"
+          cmake -S "$RUNNER_TEMP/curl-src" -B "$RUNNER_TEMP/curl-build" \
+            -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$RUNNER_TEMP/curl" \
+            -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=OFF -DENABLE_WEBSOCKETS=ON \
+            -DCURL_USE_OPENSSL=ON -DCURL_USE_LIBPSL=OFF
+          cmake --build "$RUNNER_TEMP/curl-build" --parallel 2
+          cmake --install "$RUNNER_TEMP/curl-build"
+          echo "PKG_CONFIG_PATH=$RUNNER_TEMP/curl/lib/pkgconfig:$RUNNER_TEMP/curl/lib64/pkgconfig" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$RUNNER_TEMP/curl/lib:$RUNNER_TEMP/curl/lib64" >> "$GITHUB_ENV"
+          export LD_LIBRARY_PATH="$RUNNER_TEMP/curl/lib:$RUNNER_TEMP/curl/lib64"
+          "$RUNNER_TEMP/curl/bin/curl" --version
+      - run: python3 -m venv .venv && .venv/bin/pip install -r controller/test/requirements.txt
+      - run: . .venv/bin/activate && cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - run: cmake --build build --parallel 2
+      - run: . .venv/bin/activate && ctest --test-dir build --output-on-failure

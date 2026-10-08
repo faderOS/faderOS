@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.20)
+project(faderOS VERSION 0.28.0 LANGUAGES C CXX)
+include(CTest)
+add_subdirectory(controller)
+if(BUILD_TESTING)
+  find_program(FADEROS_MAKE_EXECUTABLE make REQUIRED)
+  add_test(NAME panel-host-tests COMMAND ${FADEROS_MAKE_EXECUTABLE} -C ${CMAKE_CURRENT_SOURCE_DIR}/firmware test)
+endif()

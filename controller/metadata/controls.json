@@ -1,0 +1,1277 @@
+{
+  "revision": 1,
+  "controls": [
+    {
+      "id": 0,
+      "name": "KY-307 PST 0",
+      "port": "CHIP31_R0",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": 0
+    },
+    {
+      "id": 1,
+      "name": "KY-307 PST 1",
+      "port": "CHIP31_R0",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": 0
+    },
+    {
+      "id": 2,
+      "name": "KY-307 PST 2",
+      "port": "CHIP31_R0",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": 0
+    },
+    {
+      "id": 3,
+      "name": "KY-307 PST 3",
+      "port": "CHIP31_R0",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": 0
+    },
+    {
+      "id": 4,
+      "name": "KY-307 PST 4",
+      "port": "CHIP31_R0",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": 0
+    },
+    {
+      "id": 5,
+      "name": "KY-307 PST 5",
+      "port": "CHIP31_R0",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": 0
+    },
+    {
+      "id": 6,
+      "name": "KY-307 PST 6",
+      "port": "CHIP31_R0",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": 0
+    },
+    {
+      "id": 7,
+      "name": "KY-307 PST 7",
+      "port": "CHIP31_R0",
+      "mask": 128,
+      "states": 2,
+      "shared_color_bank": 0
+    },
+    {
+      "id": 8,
+      "name": "KY-307 PST 8",
+      "port": "CHIP31_R1",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": 0
+    },
+    {
+      "id": 9,
+      "name": "KY-307 PST 9",
+      "port": "CHIP31_R1",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": 0
+    },
+    {
+      "id": 10,
+      "name": "KY-307 PST 10",
+      "port": "CHIP31_R1",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": 0
+    },
+    {
+      "id": 11,
+      "name": "KY-307 PST 11",
+      "port": "CHIP31_R1",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": 0
+    },
+    {
+      "id": 16,
+      "name": "KY-307 PGM 0",
+      "port": "CHIP31_R2",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": 1
+    },
+    {
+      "id": 17,
+      "name": "KY-307 PGM 1",
+      "port": "CHIP31_R2",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": 1
+    },
+    {
+      "id": 18,
+      "name": "KY-307 PGM 2",
+      "port": "CHIP31_R2",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": 1
+    },
+    {
+      "id": 19,
+      "name": "KY-307 PGM 3",
+      "port": "CHIP31_R2",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": 1
+    },
+    {
+      "id": 20,
+      "name": "KY-307 PGM 4",
+      "port": "CHIP31_R2",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": 1
+    },
+    {
+      "id": 21,
+      "name": "KY-307 PGM 5",
+      "port": "CHIP31_R2",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": 1
+    },
+    {
+      "id": 22,
+      "name": "KY-307 PGM 6",
+      "port": "CHIP31_R2",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": 1
+    },
+    {
+      "id": 23,
+      "name": "KY-307 PGM 7",
+      "port": "CHIP31_R2",
+      "mask": 128,
+      "states": 2,
+      "shared_color_bank": 1
+    },
+    {
+      "id": 24,
+      "name": "KY-307 PGM 8",
+      "port": "CHIP31_R3",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": 1
+    },
+    {
+      "id": 25,
+      "name": "KY-307 PGM 9",
+      "port": "CHIP31_R3",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": 1
+    },
+    {
+      "id": 26,
+      "name": "KY-307 PGM 10",
+      "port": "CHIP31_R3",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": 1
+    },
+    {
+      "id": 27,
+      "name": "KY-307 PGM 11",
+      "port": "CHIP31_R3",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": 1
+    },
+    {
+      "id": 29,
+      "name": "KY-291 User Menu 3",
+      "port": "CHIP31_R3",
+      "mask": 32,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 30,
+      "name": "KY-291 User Menu 2",
+      "port": "CHIP31_R3",
+      "mask": 64,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 31,
+      "name": "KY-291 User Menu 1",
+      "port": "CHIP31_R3",
+      "mask": 128,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 32,
+      "name": "KY-307 KEY 0",
+      "port": "CHIP31_R4",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": 2
+    },
+    {
+      "id": 33,
+      "name": "KY-307 KEY 1",
+      "port": "CHIP31_R4",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": 2
+    },
+    {
+      "id": 34,
+      "name": "KY-307 KEY 2",
+      "port": "CHIP31_R4",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": 2
+    },
+    {
+      "id": 35,
+      "name": "KY-307 KEY 3",
+      "port": "CHIP31_R4",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": 2
+    },
+    {
+      "id": 36,
+      "name": "KY-307 KEY 4",
+      "port": "CHIP31_R4",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": 2
+    },
+    {
+      "id": 37,
+      "name": "KY-307 KEY 5",
+      "port": "CHIP31_R4",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": 2
+    },
+    {
+      "id": 38,
+      "name": "KY-307 KEY 6",
+      "port": "CHIP31_R4",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": 2
+    },
+    {
+      "id": 39,
+      "name": "KY-307 KEY 7",
+      "port": "CHIP31_R4",
+      "mask": 128,
+      "states": 2,
+      "shared_color_bank": 2
+    },
+    {
+      "id": 40,
+      "name": "KY-307 KEY 8",
+      "port": "CHIP31_R5",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": 2
+    },
+    {
+      "id": 41,
+      "name": "KY-307 KEY 9",
+      "port": "CHIP31_R5",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": 2
+    },
+    {
+      "id": 42,
+      "name": "KY-307 KEY 10",
+      "port": "CHIP31_R5",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": 2
+    },
+    {
+      "id": 43,
+      "name": "KY-307 KEY 11",
+      "port": "CHIP31_R5",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": 2
+    },
+    {
+      "id": 45,
+      "name": "KY-291 System Misc",
+      "port": "CHIP31_R5",
+      "mask": 32,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 46,
+      "name": "KY-291 System Mem",
+      "port": "CHIP31_R5",
+      "mask": 64,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 47,
+      "name": "KY-291 System Setup",
+      "port": "CHIP31_R5",
+      "mask": 128,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 48,
+      "name": "KY-307 AUX 0",
+      "port": "CHIP31_R6",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": 3
+    },
+    {
+      "id": 49,
+      "name": "KY-307 AUX 1",
+      "port": "CHIP31_R6",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": 3
+    },
+    {
+      "id": 50,
+      "name": "KY-307 AUX 2",
+      "port": "CHIP31_R6",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": 3
+    },
+    {
+      "id": 51,
+      "name": "KY-307 AUX 3",
+      "port": "CHIP31_R6",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": 3
+    },
+    {
+      "id": 52,
+      "name": "KY-307 AUX 4",
+      "port": "CHIP31_R6",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": 3
+    },
+    {
+      "id": 53,
+      "name": "KY-307 AUX 5",
+      "port": "CHIP31_R6",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": 3
+    },
+    {
+      "id": 54,
+      "name": "KY-307 AUX 6",
+      "port": "CHIP31_R6",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": 3
+    },
+    {
+      "id": 55,
+      "name": "KY-307 AUX 7",
+      "port": "CHIP31_R6",
+      "mask": 128,
+      "states": 2,
+      "shared_color_bank": 3
+    },
+    {
+      "id": 56,
+      "name": "KY-307 AUX 8",
+      "port": "CHIP31_R7",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": 3
+    },
+    {
+      "id": 57,
+      "name": "KY-307 AUX 9",
+      "port": "CHIP31_R7",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": 3
+    },
+    {
+      "id": 58,
+      "name": "KY-307 AUX 10",
+      "port": "CHIP31_R7",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": 3
+    },
+    {
+      "id": 59,
+      "name": "KY-307 AUX 11",
+      "port": "CHIP31_R7",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": 3
+    },
+    {
+      "id": 61,
+      "name": "KY-291 Enable GPI",
+      "port": "CHIP31_R7",
+      "mask": 32,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 62,
+      "name": "KY-291 Enable DME",
+      "port": "CHIP31_R7",
+      "mask": 64,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 63,
+      "name": "KY-291 Enable Editor",
+      "port": "CHIP31_R7",
+      "mask": 128,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 64,
+      "name": "KY-307 Matte Colormix",
+      "port": "CHIP11_R0",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 65,
+      "name": "KY-307 Matte 2nd Matte",
+      "port": "CHIP11_R0",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 66,
+      "name": "KY-307 FILL Matte",
+      "port": "CHIP11_R0",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 67,
+      "name": "KY-307 FILL Keybus",
+      "port": "CHIP11_R0",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 68,
+      "name": "KY-307 SOURCE Self",
+      "port": "CHIP11_R0",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 69,
+      "name": "KY-307 SOURCE Auto",
+      "port": "CHIP11_R0",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 70,
+      "name": "KY-307 SOURCE Split",
+      "port": "CHIP11_R0",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 71,
+      "name": "KY-307 FineKey",
+      "port": "CHIP11_R0",
+      "mask": 128,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 72,
+      "name": "KY-307 Matte Key1 Edge",
+      "port": "CHIP11_R1",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 73,
+      "name": "KY-307 Matte Key2 Edge",
+      "port": "CHIP11_R1",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 74,
+      "name": "KY-307 Matte DSK Edge",
+      "port": "CHIP11_R1",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 75,
+      "name": "KY-307 Matte Wipe Bord",
+      "port": "CHIP11_R1",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 76,
+      "name": "KY-307 Matte Key1 Fill",
+      "port": "CHIP11_R1",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 77,
+      "name": "KY-307 Matte Key2 Fill",
+      "port": "CHIP11_R1",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 78,
+      "name": "KY-307 Matte DSK Fill",
+      "port": "CHIP11_R1",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 79,
+      "name": "KY-307 Matte Color Bkgd",
+      "port": "CHIP11_R1",
+      "mask": 128,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 80,
+      "name": "KY-307 Shift",
+      "port": "CHIP11_R2",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 81,
+      "name": "KY-307 Key Source",
+      "port": "CHIP11_R2",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 82,
+      "name": "KY-307 FrameMem 1",
+      "port": "CHIP11_R2",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 83,
+      "name": "KY-307 FrameMem 2",
+      "port": "CHIP11_R2",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 84,
+      "name": "KY-307 Aux 1 Ind",
+      "port": "CHIP11_R2",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 85,
+      "name": "KY-307 Aux 2 Ind",
+      "port": "CHIP11_R2",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 86,
+      "name": "KY-307 Aux 3 Ind",
+      "port": "CHIP11_R2",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 87,
+      "name": "KY-307 Edit Pvw",
+      "port": "CHIP11_R2",
+      "mask": 128,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 88,
+      "name": "KY-307 TYPE Lum",
+      "port": "CHIP11_R3",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 89,
+      "name": "KY-307 TYPE Lin",
+      "port": "CHIP11_R3",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 90,
+      "name": "KY-307 TYPE Clean",
+      "port": "CHIP11_R3",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 91,
+      "name": "KY-307 TYPE Chr",
+      "port": "CHIP11_R3",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 92,
+      "name": "KY-307 TYPE Ptn",
+      "port": "CHIP11_R3",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 93,
+      "name": "KY-307 Delegation Key1",
+      "port": "CHIP11_R3",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 94,
+      "name": "KY-307 Delegation Key2",
+      "port": "CHIP11_R3",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 95,
+      "name": "KY-307 Delegation DSK",
+      "port": "CHIP11_R3",
+      "mask": 128,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 96,
+      "name": "KY-307 EDGE Bord",
+      "port": "CHIP21_R0",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 97,
+      "name": "KY-307 EDGE Drop Bord",
+      "port": "CHIP21_R0",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 98,
+      "name": "KY-307 EDGE Shdw",
+      "port": "CHIP21_R0",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 99,
+      "name": "KY-307 EDGE Outline",
+      "port": "CHIP21_R0",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 100,
+      "name": "KY-307 MODIFY Main Mask",
+      "port": "CHIP21_R0",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 101,
+      "name": "KY-307 MODIFY Sub Mask",
+      "port": "CHIP21_R0",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 102,
+      "name": "KY-307 MODIFY Key Inv",
+      "port": "CHIP21_R0",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 103,
+      "name": "KY-307 MODIFY Blank",
+      "port": "CHIP21_R0",
+      "mask": 128,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 104,
+      "name": "KY-307 Delegation Blank1",
+      "port": "CHIP21_R1",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 105,
+      "name": "KY-307 Delegation Blank2",
+      "port": "CHIP21_R1",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 106,
+      "name": "KY-307 DEPTH Key",
+      "port": "CHIP21_R1",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 107,
+      "name": "KY-307 PROCKEY",
+      "port": "CHIP21_R1",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 108,
+      "name": "KY-307 Utility 1",
+      "port": "CHIP21_R1",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 109,
+      "name": "KY-307 Utility 2",
+      "port": "CHIP21_R1",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 110,
+      "name": "KY-307 Utility 3",
+      "port": "CHIP21_R1",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 111,
+      "name": "KY-307 Utility 4",
+      "port": "CHIP21_R1",
+      "mask": 128,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 112,
+      "name": "KY-307 KeyPrior",
+      "port": "CHIP21_R2",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 113,
+      "name": "KY-307 Key1 On",
+      "port": "CHIP21_R2",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 114,
+      "name": "KY-307 Key2 On",
+      "port": "CHIP21_R2",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 115,
+      "name": "KY-307 FTB",
+      "port": "CHIP21_R2",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 116,
+      "name": "KY-307 Bkgd",
+      "port": "CHIP21_R2",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 117,
+      "name": "KY-307 Mix Key1",
+      "port": "CHIP21_R2",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 118,
+      "name": "KY-307 Mix Key2",
+      "port": "CHIP21_R2",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 119,
+      "name": "KY-307 DSK Pvw",
+      "port": "CHIP21_R2",
+      "mask": 128,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 120,
+      "name": "KY-307 Mix",
+      "port": "CHIP21_R3",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 121,
+      "name": "KY-307 Wipe",
+      "port": "CHIP21_R3",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 122,
+      "name": "KY-307 DME",
+      "port": "CHIP21_R3",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 123,
+      "name": "KY-307 DSK Mix",
+      "port": "CHIP21_R3",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 124,
+      "name": "KY-307 DSK On",
+      "port": "CHIP21_R3",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 126,
+      "name": "KY-307 Auto Trans",
+      "port": "CHIP21_R3",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 127,
+      "name": "KY-307 Cut",
+      "port": "CHIP21_R3",
+      "mask": 128,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 128,
+      "name": "KY-306 Transrate",
+      "port": "KY306_S0",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 129,
+      "name": "KY-306 Pad 7",
+      "port": "KY306_S0",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 130,
+      "name": "KY-306 Pad 8",
+      "port": "KY306_S0",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 131,
+      "name": "KY-306 Pad 9",
+      "port": "KY306_S0",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 132,
+      "name": "KY-306 Pad +",
+      "port": "KY306_S0",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 136,
+      "name": "KY-306 Pad Wipe",
+      "port": "KY306_S1",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 137,
+      "name": "KY-306 Pad 4",
+      "port": "KY306_S1",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 138,
+      "name": "KY-306 Pad 5",
+      "port": "KY306_S1",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 139,
+      "name": "KY-306 Pad 6",
+      "port": "KY306_S1",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 140,
+      "name": "KY-306 Pad Clear",
+      "port": "KY306_S1",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 144,
+      "name": "KY-306 Learn",
+      "port": "KY306_S2",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 145,
+      "name": "KY-306 Pad 1",
+      "port": "KY306_S2",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 146,
+      "name": "KY-306 Pad 2",
+      "port": "KY306_S2",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 147,
+      "name": "KY-306 Pad 3",
+      "port": "KY306_S2",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 148,
+      "name": "KY-306 Pad Trim",
+      "port": "KY306_S2",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 152,
+      "name": "KY-306 Recall",
+      "port": "KY306_S3",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 153,
+      "name": "KY-306 Pad 0",
+      "port": "KY306_S3",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 154,
+      "name": "KY-306 Pad Point",
+      "port": "KY306_S3",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 155,
+      "name": "KY-306 Pad Direct",
+      "port": "KY306_S3",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 156,
+      "name": "KY-306 Pad Enter",
+      "port": "KY306_S3",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 160,
+      "name": "KY-308 F1",
+      "port": "KY308_R0",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 161,
+      "name": "KY-308 F2",
+      "port": "KY308_R0",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 162,
+      "name": "KY-308 F3",
+      "port": "KY308_R0",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 163,
+      "name": "KY-308 F4",
+      "port": "KY308_R0",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 164,
+      "name": "KY-308 F5",
+      "port": "KY308_R0",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 165,
+      "name": "KY-308 F6",
+      "port": "KY308_R0",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 168,
+      "name": "KY-308 Bord",
+      "port": "KY308_R1",
+      "mask": 1,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 169,
+      "name": "KY-308 Soft",
+      "port": "KY308_R1",
+      "mask": 2,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 170,
+      "name": "KY-308 Aspect",
+      "port": "KY308_R1",
+      "mask": 4,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 171,
+      "name": "KY-308 Multi",
+      "port": "KY308_R1",
+      "mask": 8,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 172,
+      "name": "KY-308 Rotation",
+      "port": "KY308_R1",
+      "mask": 16,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 173,
+      "name": "KY-308 Modify",
+      "port": "KY308_R1",
+      "mask": 32,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 174,
+      "name": "KY-308 PosOn",
+      "port": "KY308_R1",
+      "mask": 64,
+      "states": 2,
+      "shared_color_bank": null
+    },
+    {
+      "id": 176,
+      "name": "KY-308 Exit",
+      "port": "KY308_R2",
+      "mask": 1,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 177,
+      "name": "KY-308 Rev",
+      "port": "KY308_R2",
+      "mask": 2,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 178,
+      "name": "KY-308 NormRev",
+      "port": "KY308_R2",
+      "mask": 4,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 179,
+      "name": "KY-308 Norm",
+      "port": "KY308_R2",
+      "mask": 8,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 180,
+      "name": "KY-308 Up",
+      "port": "KY308_R2",
+      "mask": 16,
+      "states": 1,
+      "shared_color_bank": null
+    },
+    {
+      "id": 181,
+      "name": "KY-308 Down",
+      "port": "KY308_R2",
+      "mask": 32,
+      "states": 1,
+      "shared_color_bank": null
+    }
+  ]
+}
