@@ -7,6 +7,9 @@ struct MemoryStore final:ConfigStore { bool save(const Config&) override { retur
 struct ProbeAdapter final:MixerAdapter {
     MixerState view;
     Config last;
+    unsigned dust_calls=0,border_calls=0;
+    bool prepare_dust(const std::array<uint32_t,3>&)override{++dust_calls;return true;}
+    bool prepare_wipe_border_profile(int,int,int)override{++border_calls;return true;}
     unsigned configured=0,disabled=0,commands=0;
     bool frames=false,usks=true,overlays=false;
     unsigned overlay_calls=0,overlay_layer=99,overlay_source=99;bool overlay_preview=false;
@@ -34,6 +37,8 @@ int main() {
     ProbeAdapter obs,kavtor;kavtor.frames=true;
     AdapterRouter router;router.attach(Backend::obs,obs);router.attach(Backend::kavtor,kavtor);
     Config c;router.configure(c);
+    assert(router.prepare_dust({50,2,0})&&obs.dust_calls==1&&kavtor.dust_calls==0);
+    assert(router.prepare_wipe_border_profile(-1,15,0)&&obs.border_calls==1&&kavtor.border_calls==0);
     assert(router.keypad_transition_slots(TransitionType::mix)==3&&router.keypad_transition_slots(TransitionType::dme)==7);
     assert(router.first_keypad_transition_slot(TransitionType::dme)==0&&router.first_stinger_slot()==1);
     assert(!router.keypad_transition_available(TransitionType::dme,6)&&router.keypad_transition_available(TransitionType::dme,7));

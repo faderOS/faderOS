@@ -26,6 +26,8 @@ int main() {
     std::atomic<unsigned> soft_amount=999,aspect_w=0,aspect_h=0;
     std::atomic<unsigned> samples=0,last_mix=0,last_dme=0,last_wipe=0;
     std::atomic<unsigned> sony_dme_manual=0;
+    std::atomic<int> border_side=0,border_inner=-1,border_outer=-1;
+    std::atomic<bool> dust=false;std::atomic<unsigned> dust_ratio=50,dust_size=2,dust_flash=0;
     std::atomic<bool> image_background=false,broadcast=false,global_backgrounds=false,last_background_global=false;std::atomic<unsigned> gain_a=100,gain_b=100,dip_rgb=0;
     std::atomic<bool> move_manual=false,cube_manual=false,page_manual=false;std::atomic<unsigned> backgrounds=0;
     std::atomic<bool> sony_namespace=false,advertise_dip=false,advertise_dme=false,dip_manual=false,dip_auto=false;
@@ -42,8 +44,8 @@ int main() {
             Json effective=bg;if(global_backgrounds)for(const auto& effect:{"move","cube","zoom","page_curl","page_roll"})if(!bg_scopes.value(effect,false))effective[effect]=bg["global"];
             auto data=Json({{"event","state"},{"me",me},{"program",pgm[me]},{"preview",pvw[me]},
                 {"manual",active[me]&&!automatic},{"position",pos[me]},{"transitioning",active[me]},
-                {"keys",keys},{"dsks",dsks},{"capabilities",{{"mixPreparation",true},{"broadcastMixes",broadcast.load()},{"dmeBackground",true},{"dmeBackgroundScopes",global_backgrounds.load()},{"sonyDmes",Json::array({1001,1002,1003,1004,2601,2602,2603,2604})},{"keyInversion",broadcast.load()},{"keyModes",broadcast?Json::array({"linear","chroma","luma"}):Json::array({"linear","chroma"})},{"mixModes",(broadcast?Json::array({"mix","dip","vfade","fadecut","cutfade","nam","supermix"}):advertise_dip?Json::array({"mix","dip","vfade","fadecut","cutfade"}):Json::array({"mix","vfade","fadecut","cutfade"}))},{"dmeEffects",(advertise_dme?Json::array({"push","slide","move","cube","zoom","page_curl","page_roll"}):Json::array({"push","slide"}))},{"sonyWipes",Json::array({1,3,5,6,9,17,18,21,23,24})}}},
-                {"superMixGainA",gain_a.load()},{"superMixGainB",gain_b.load()},{"dipColor","#000000"},{"dmeBackgrounds",effective},{"dmeBackgroundScopes",bg_scopes},{"colorSources",Json::array({2})},{"transitionPreview",preview},{"take","mix"},{"next",{{"background",true},{"keys",Json::array({false,false,false,false})}}}}).dump()+"\n";
+                {"keys",keys},{"dsks",dsks},{"capabilities",{{"asymmetricBorder",dust.load()},{"dustMix",dust.load()},{"mixPreparation",true},{"broadcastMixes",broadcast.load()},{"dmeBackground",true},{"dmeBackgroundScopes",global_backgrounds.load()},{"sonyDmes",Json::array({1001,1002,1003,1004,2601,2602,2603,2604})},{"keyInversion",broadcast.load()},{"keyModes",broadcast?Json::array({"linear","chroma","luma"}):Json::array({"linear","chroma"})},{"mixModes",(broadcast?Json::array({"mix","dip","vfade","fadecut","cutfade","nam","supermix"}):advertise_dip?Json::array({"mix","dip","vfade","fadecut","cutfade"}):Json::array({"mix","vfade","fadecut","cutfade"}))},{"dmeEffects",(advertise_dme?Json::array({"push","slide","move","cube","zoom","page_curl","page_roll"}):Json::array({"push","slide"}))},{"sonyWipes",Json::array({1,3,5,6,9,17,18,21,23,24})}}},
+                {"wipeBorderSide",border_side.load()},{"wipeInnerSoft",border_inner.load()},{"wipeOuterSoft",border_outer.load()},{"dustRatio",dust_ratio.load()},{"dustSize",dust_size.load()},{"dustFlash",dust_flash.load()},{"superMixGainA",gain_a.load()},{"superMixGainB",gain_b.load()},{"dipColor","#000000"},{"dmeBackgrounds",effective},{"dmeBackgroundScopes",bg_scopes},{"colorSources",Json::array({2})},{"transitionPreview",preview},{"take","mix"},{"next",{{"background",true},{"keys",Json::array({false,false,false,false})}}}}).dump()+"\n";
             assert(send(fd,data.data(),data.size(),MSG_NOSIGNAL)==ssize_t(data.size()));
         };
         state();std::string pending;
@@ -76,7 +78,9 @@ int main() {
                     }
                     automatic=true;active[me]=true;state();
                     std::swap(pgm[me],pvw[me]);active[me]=false;automatic=false;state();
-                } else if(cmd=="mix_params") {gain_a=line.at("aGain");gain_b=line.at("bGain");state();}
+                } else if(cmd=="wipe_border_profile"){border_side=line.at("side");border_inner=line.at("innerSoft");border_outer=line.at("outerSoft");state();}
+                else if(cmd=="dust_params"){dust_ratio=line.at("ratio");dust_size=line.at("size");dust_flash=line.at("flash");state();}
+                else if(cmd=="mix_params") {gain_a=line.at("aGain");gain_b=line.at("bGain");state();}
                 else if(cmd=="dip_color") {dip_rgb=std::stoul(line.at("color").get<std::string>().substr(1),nullptr,16);state();}
                 else if(cmd=="dme_background") {
                     const auto effect=line.at("effect").get<std::string>();
@@ -212,6 +216,15 @@ int main() {
     assert(adapter.prepare_mix(true,60,80));wait_for([&]{return gain_a==60&&gain_b==80&&adapter.state().super_gain_a==60;});
     assert(!adapter.prepare_mix(true,101,80));
     assert(adapter.prepare_mix(false,0x21abcd));wait_for([&]{return dip_rgb==0x21abcd;});
+    assert(!adapter.keypad_transition_available(TransitionType::mix,8));
+    dust=true;assert(adapter.set_me(1));wait_for([&]{return adapter.keypad_transition_slots(TransitionType::mix)==8;});
+    assert(adapter.keypad_transition_available(TransitionType::mix,8)&&adapter.keypad_transition_label(TransitionType::mix,8)=="DUST MIX");
+    assert(adapter.prepare_dust({75,3,10}));wait_for([&]{return dust_ratio==75&&dust_size==3&&dust_flash==10;});
+    assert(!adapter.prepare_dust({75,0,10}));
+    assert(adapter.state().border_profile_known);assert(adapter.prepare_wipe_border_profile(-1,15,0));wait_for([&]{return border_side==-1&&border_inner==15&&border_outer==0;});
+    assert(!adapter.prepare_wipe_border_profile(2,15,0));
+
+
     global_backgrounds=true;assert(adapter.set_me(3));wait_for([&]{return adapter.state().dme_background_scopes_supported;});
     assert(!adapter.dme_background_custom(0));assert(adapter.set_dme_background(0,2));wait_for([&]{return last_background_global&&adapter.dme_background(0)==2;});
     assert(adapter.set_dme_background_scope(0,true));wait_for([&]{return adapter.dme_background_custom(0);});
