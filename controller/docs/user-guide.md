@@ -183,7 +183,7 @@ With kavtor 0.26.0 and casparMIX 0.19.0, MIX 8 selects Dust Mix. It lights LOW
 when available and HIGH when selected. MODFY F1/F2/F3 prepare dust ratio (0–100),
 square particle size (1–100% of picture height) and flash steps (0–100). Encoders
 update preparation; F keys open numeric drafts, ENTER commits and the same F key
-cancels. F6 restores 50/2/0. Double-click MODFY restores defaults without taking
+cancels. F6 restores 100/2/0. Double-click MODFY restores defaults without taking
 LCD focus. AUTO, T-bar and TRANSITION PREVIEW use the selected Dust Mix mode.
 
 For native WIPE borders, BORD F4 cycles CENTER → INNER → OUTER. Detailed inner
@@ -192,3 +192,6 @@ BORD stays LOW when a profile differs from default. Double-click BORD clears
 width and restores centered/inherited softness without opening its menu.
 Profiles are initially shared preparation defaults. Existing per-wipe width
 and SOFT overrides retain their current behavior. No Sony firmware flash is needed.
+
+Controller 0.29.1 defaults/recalls pure dust (100/2/0). An older explicit 50%
+preparation still includes a dissolve; use MODFY F6 or set ratio to 100.

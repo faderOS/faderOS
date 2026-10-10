@@ -51,7 +51,7 @@ class TransitionControl {
     bool dsk_shifted=false,dsk_locked=false,dsk_grace=false;
     uint32_t dsk_pressed_at=0;
     bool mix_params_target()const {return !wipe_menu&&selected==TransitionType::mix&&((mix_choice==8&&adapter.state().dust_mix_known)||((mix_choice==5||mix_choice==7)&&adapter.supports_mix_preparation(mix_choice==7)));}
-    bool mix_params_modified()const {if(!mix_params_target())return false;auto s=adapter.state();if(mix_choice==8)return s.dust_values!=std::array<uint32_t,3>{50,2,0};return mix_choice==5?s.dip_rgb!=0:s.super_gain_a!=100||s.super_gain_b!=100;}
+    bool mix_params_modified()const {if(!mix_params_target())return false;auto s=adapter.state();if(mix_choice==8)return s.dust_values!=std::array<uint32_t,3>{100,2,0};return mix_choice==5?s.dip_rgb!=0:s.super_gain_a!=100||s.super_gain_b!=100;}
     void read_mix_values(){auto s=adapter.state();mix_revision=s.mix_preparation_revision;mix_values=mix_dust?s.dust_values:mix_super?std::array<uint32_t,3>{s.super_gain_a,s.super_gain_b,0}:std::array<uint32_t,3>{s.dip_rgb>>16,(s.dip_rgb>>8)&255,s.dip_rgb&255};}
     bool push_mix_values(){return mix_dust?adapter.prepare_dust(mix_values):adapter.prepare_mix(mix_super,mix_super?mix_values[0]:(mix_values[0]<<16)|(mix_values[1]<<8)|mix_values[2],mix_super?mix_values[1]:0);}
     void toggle_user();
