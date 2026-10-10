@@ -176,7 +176,7 @@ void TransitionControl::modifiers(Changes& change,uint32_t now,bool allow_menu) 
                 typing=modify_before.typing;invalid=modify_before.invalid;value=modify_before.value;geometry_menu=modify_before.geometry;mix_params_menu=modify_before.mix_params;
             }
             modify_focus_saved=false;
-            if(mix_params_target()){if(mix_choice==8){if(!adapter.prepare_dust({50,2,0}))panel.beep();}else {const bool super=mix_choice==7;if(!adapter.prepare_mix(super,super?100:0,super?100:0))panel.beep();}}
+            if(mix_params_target()){if(mix_choice==8){if(!adapter.prepare_dust({100,2,0}))panel.beep();}else {const bool super=mix_choice==7;if(!adapter.prepare_mix(super,super?100:0,super?100:0))panel.beep();}}
             else if(geometry_target()){reset_geometry();push_style(true);}
             else if(adapter.supports_dme_background(dme_choice)){background_arm=false;if(!adapter.set_dme_background(dme_choice,-1))panel.beep();}
             else if(has_dme_parameters()) parameters()={};
@@ -278,7 +278,7 @@ bool TransitionControl::press(const std::bitset<KeyCount>& keys,const std::bitse
     unsigned id=0; while(!keys[id]) ++id;
     if(mix_params_menu&&((id>=160&&id<=162)||id==165||id==176)){
         if(id==176){if(style_keypad)style_keypad=false;else mix_params_menu=modify_menu=false;typing=invalid=false;return true;}
-        if(id==165){mix_values=mix_dust?std::array<uint32_t,3>{50,2,0}:mix_super?std::array<uint32_t,3>{100,100,0}:std::array<uint32_t,3>{0,0,0};style_keypad=typing=invalid=false;if(!push_mix_values())panel.beep();return true;}
+        if(id==165){mix_values=mix_dust?std::array<uint32_t,3>{100,2,0}:mix_super?std::array<uint32_t,3>{100,100,0}:std::array<uint32_t,3>{0,0,0};style_keypad=typing=invalid=false;if(!push_mix_values())panel.beep();return true;}
         unsigned index=id-160;if(index>=(mix_super?2u:3u)){panel.beep();return true;}
         bool same=style_keypad&&style_kind==240+index;style_keypad=!same;style_kind=240+index;value=mix_values[index];typing=invalid=false;return true;
     }

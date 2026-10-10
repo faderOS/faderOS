@@ -140,9 +140,9 @@ int main() {
         key(129);key(173);assert(has(p.line(0),"SUPER MIX"));key(161);before=a.writes;key(138);key(153);assert(a.writes==before);key(156);assert(a.view.super_gain_b==50);
         t.mix_rotary(-25,0,0);assert(a.view.super_gain_a==75&&a.view.super_gain_b==50);key(165);assert(a.view.super_gain_a==100&&a.view.super_gain_b==100);
         key(176);key(130);key(173);assert(has(p.line(0),"DUST MIX")&&p.desired_led(173)==2);
-        key(160);before=a.writes;key(129);key(138);assert(a.writes==before&&a.view.dust_values[0]==50);key(156);assert(a.view.dust_values[0]==75);
+        key(160);before=a.writes;key(129);key(138);assert(a.writes==before&&a.view.dust_values[0]==100);key(156);assert(a.view.dust_values[0]==75);
         t.mix_rotary(0,3,10);assert((a.view.dust_values==std::array<uint32_t,3>{75,5,10}));
-        key(165);assert((a.view.dust_values==std::array<uint32_t,3>{50,2,0}));
+        key(165);assert((a.view.dust_values==std::array<uint32_t,3>{100,2,0}));
 
     }
     {
